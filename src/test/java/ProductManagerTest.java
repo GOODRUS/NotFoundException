@@ -117,28 +117,10 @@ public class ProductManagerTest {
         manager.add(book2);
         manager.add(smartphone1);
         manager.add(smartphone2);
-        manager.add(smartphone2);
+        manager.add(smartphone3);
 
         Product[] expected = {};
         Product[] actual = manager.searchBy("Тараканище");
-
-        assertArrayEquals(expected, actual);
-    }
-
-     /*
-    Тест на метод поиска "searchBy" при ситуации когда находится несколько одинаковых товаров
-     */
-
-    @Test
-    public void shouldSearchSameProducts() {
-
-        manager.add(book2);
-        manager.add(smartphone1);
-        manager.add(smartphone2);
-        manager.add(smartphone2);
-
-        Product[] expected = {smartphone2, smartphone2};
-        Product[] actual = manager.searchBy("Sony Xperia Z3");
 
         assertArrayEquals(expected, actual);
     }
@@ -181,6 +163,42 @@ public class ProductManagerTest {
         manager.add(smartphone3);
 
         assertThrows(NotFoundException.class,
-        () ->manager.remoteById(14));
+                () -> manager.remoteById(14));
+    }
+
+     /*
+    Тест на добавление товаров
+     */
+
+    @Test
+    public void shouldAddProducts() {
+
+        manager.add(book1);
+        manager.add(book2);
+        manager.add(book3);
+        manager.add(book4);
+        manager.add(smartphone1);
+        manager.add(smartphone2);
+        manager.add(smartphone3);
+
+        Product[] expected = {book1, book2, book3, book4, smartphone1, smartphone2, smartphone3};
+        Product[] actual = repo.findAll();
+
+        assertArrayEquals(expected, actual);
+    }
+
+      /*
+    Тест на метод поиска "searchBy" при ситуации когда находится несколько одинаковых товаров
+     */
+
+    @Test
+    public void shouldSearchSameProducts() {
+
+        manager.add(book2);
+        manager.add(smartphone1);
+        manager.add(smartphone3);
+
+        assertThrows(AlreadyExistsException.class,
+                () -> manager.add(smartphone3));
     }
 }

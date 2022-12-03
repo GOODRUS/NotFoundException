@@ -6,10 +6,15 @@ public class ProductManager {
     }
 
     public void add(Product product) {
+        if (repo.findById(product.getId()) == product) {
+            throw new AlreadyExistsException(product.id);
+        }
         repo.save(product);
     }
 
-    public void remoteById(int id) { repo.remoteById(id); }
+    public void remoteById(int id) {
+        repo.remoteById(id);
+    }
 
     public Product[] searchBy(String text) {
         Product[] result = new Product[0];
